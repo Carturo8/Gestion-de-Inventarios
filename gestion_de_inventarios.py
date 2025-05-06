@@ -1,3 +1,5 @@
+import re
+
 inventory:dict = {}
 
 def validate_product_name(product_name:str = ""):
@@ -139,6 +141,6 @@ def delete_product(product_name:str = ""):
 print(f"\nEl inventario es: {inventory}")
 
 #def calculate_total_inventory_value
-inv = {'A': (24523.0, 2), 'C': (12345.0, 5)}
-total = sum(map(lambda x: x[1], inv.values()))
-print(total)
+#inv = {'A': (24523.0, 2), 'C': (12345.0, 5)}
+#total = sum(map(lambda x: x[1], inv.values()))
+#print(total)
