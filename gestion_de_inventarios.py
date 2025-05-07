@@ -72,6 +72,8 @@ def search_product(product_name:str = ""):
     Parameters:
     product_name: str, name of the product.
     """
+    product_price:float = 0.0
+    product_quantity:int = 0
     condition = True
     while condition:
         if product_name in inventory.keys():
@@ -80,6 +82,8 @@ def search_product(product_name:str = ""):
     - Nombre del producto: '{product_name}'
     - Precio: ${inventory[product_name][0]}
     - Cantidad disponible: {inventory[product_name][1]}""")
+            product_price = inventory[product_name][0]
+            product_quantity = inventory[product_name][1]
         else:
             print("El producto no se encuentra en el inventario.")
         print("\n¿Deseas buscar otro producto? (s/n): ")
@@ -87,7 +91,7 @@ def search_product(product_name:str = ""):
             condition = False
         else:
             product_name = validate_product_name()
-    return inventory[product_name][0], inventory[product_name][1]
+    return product_price, product_quantity
 
 def update_product_price(product_name:str = "", new_product_price:float = 0.0):
     """
@@ -118,11 +122,18 @@ def delete_product(product_name:str = ""):
     Parameters:
     product_name: str, name of the product.
     """
-    if product_name in inventory.keys():
-        del inventory[product_name]
-        print(f"\nEl producto {product_name} ha sido eliminado del inventario.")
-    else:
-        print("El producto no se encuentra en el inventario.")
+    condition = True
+    while condition:
+        if product_name in inventory.keys():
+            del inventory[product_name]
+            print(f"\nEl producto '{product_name}' ha sido eliminado del inventario.")
+        else:
+            print("\nEl producto no se encuentra en el inventario.")
+        print("\n¿Deseas eliminar otro producto? (s/n): ")
+        if input().lower() != "s":
+            condition = False
+        else:
+            product_name = validate_product_name()
 
 def menu_1():
     """
@@ -137,6 +148,8 @@ def menu_1():
     6. Ver el inventario.
    --> Ingrese otro valor para salir.
     """)
+    option = input("Ingresa el número de la acción que deseas realizar: ")
+    return option
 
 def menu_2():
     """
@@ -147,9 +160,7 @@ def menu_2():
    --> Ingrese otro valor para salir.""")
     option = input("\nIngresa la opción deseada: ")
     condition = True
-    if option == "1":
-        menu_1()
-    else:
+    if option != "1":
         condition = False
         print("Gracias por usar el programa.")
     return condition
@@ -159,9 +170,8 @@ def main():
     Function to run the program.
     """
     condition = True
-    menu_1()
     while condition:
-        option = input("Ingresa el número de la acción que deseas realizar: ")
+        option = menu_1()[0]
         if option == "1":
             print("\n-- Añadir producto --")
             product_name = validate_product_name()
@@ -187,7 +197,8 @@ def main():
             condition = menu_2()
         elif option == "5":
             print("\n-- Calcular el valor total del inventario --")
-            print(sum(map(lambda x: x[0], inventory.values())))
+            total_value = sum(map(lambda x: x[0], inventory.values()))
+            print(f"\nEl valor total del inventario es: ${total_value:.2f}")
             condition = menu_2()
         elif option == "6":
             print("\n-- Ver el inventario --")
