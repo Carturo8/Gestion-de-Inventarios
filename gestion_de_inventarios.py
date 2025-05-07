@@ -12,11 +12,11 @@ def validate_product_name(product_name:str = ""):
         if len(product_name) > 25:
             print("El nombre del producto no debe exceder los 25 caracteres.")
         elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", product_name):
-            print("El nombre del producto solo puede contener letras y espacios.")
+            print("Nombre inválido. Ingrese un nombre de producto válido.")
         else:
             product_name = product_name.capitalize()
             condition = False
-    return product_name
+    return product_name.capitalize()
 
 def validate_product_price(product_price:float = 0.0):
     """
@@ -29,7 +29,7 @@ def validate_product_price(product_price:float = 0.0):
             if product_price >= 0:
                 condition = False
             else:
-                print("El número debe ser positivo.")
+                print("Precio inválido. El precio debe ser un número igual o mayor que cero.")
         except ValueError:
             print("Entrada inválida. Ingresa un número real igual o mayor que cero.")
     return product_price
@@ -45,19 +45,10 @@ def validate_product_quantity(product_quantity:int = 0):
             if product_quantity >= 0:
                 condition = False
             else:
-                print("El número debe ser positivo.")
+                print("Cantidad inválida. La cantidad debe ser un número igual o mayor que cero.")
         except ValueError:
             print("Entrada inválida. Ingresa un número entero igual o mayor que cero.")
     return product_quantity
-
-def request_product_data():
-    """
-    Function to request product data.
-    """
-    product_name = validate_product_name()
-    product_price = validate_product_price()
-    product_quantity = validate_product_quantity()
-    return product_name, product_price, product_quantity
 
 def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0):
     """
@@ -66,11 +57,13 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
     condition = True
     while condition:
         inventory[product_name] = (product_price, product_quantity)
-        print("\nDesea ingresar otro producto? (s/n): ")
+        print("\n¿Deseas añadir otro producto? (s/n): ")
         if input().lower() != "s":
             condition = False
         else:
-            product_name, product_price, product_quantity = request_product_data()
+            product_name = validate_product_name()
+            product_price = validate_product_price()
+            product_quantity = validate_product_quantity()
 
 def search_product(product_name:str = ""):
     """
@@ -81,27 +74,20 @@ def search_product(product_name:str = ""):
     """
     condition = True
     while condition:
-        name = validate_product_name(f"\nIngresa el nombre del producto a buscar: ")
-        name = name.capitalize()
-        if name in inventory.keys():
+        if product_name in inventory.keys():
             print(f"""
     ¡Producto encontrado!
-    - Nombre del producto: '{name}'
-    - Precio: ${inventory[name][0]}
-    - Cantidad disponible: {inventory[name][1]}""")
-            print("\nDesea buscar otro producto? (s/n): ")
-            if input().lower() != "s":
-                condition = False
+    - Nombre del producto: '{product_name}'
+    - Precio: ${inventory[product_name][0]}
+    - Cantidad disponible: {inventory[product_name][1]}""")
         else:
-            print("Producto no encontrado.")
-            print("\nDesea agregar este producto? (s/n): ")
-            if input().lower() != "s":
-                print("\nDesea buscar otro producto? (s/n): ")
-                if input().lower() != "s":
-                    condition = False
-            else:
-                add_product()
-    return inventory[name][0], inventory[name][1]
+            print("El producto no se encuentra en el inventario.")
+        print("\n¿Deseas buscar otro producto? (s/n): ")
+        if input().lower() != "s":
+            condition = False
+        else:
+            product_name = validate_product_name()
+    return inventory[product_name][0], inventory[product_name][1]
 
 def update_product_price(product_name:str = "", new_product_price:float = 0.0):
     """
@@ -111,12 +97,19 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0):
     product_name: str, name of the product.
     product_price: float, new price of the product.
     """
-    name = validate_product_name(f"\nIngresa el nombre del producto a actualizar: ")
-    if name in inventory.keys():
-        new_price = validate_product_price(f"\nIngresa el nuevo precio del producto '{name}': ")
-        inventory[name] = (new_price, inventory[name][1])
-    else:
-        print("Producto no encontrado.")
+    condition = True
+    while condition:
+        if product_name in inventory.keys():
+            inventory[product_name] = (new_product_price, inventory[product_name][1])
+            print(f"\nEl precio del producto '{product_name}' ha sido actualizado a ${new_product_price}.")
+        else:
+            print("\nEl producto no se encuentra en el inventario.")
+        print("\n¿Deseas actualizar el precio de otro producto? (s/n): ")
+        if input().lower() != "s":
+            condition = False
+        else:
+            product_name = validate_product_name()
+            new_product_price = validate_product_price()
 
 def delete_product(product_name:str = ""):
     """
@@ -125,26 +118,17 @@ def delete_product(product_name:str = ""):
     Parameters:
     product_name: str, name of the product.
     """
-    name = validate_product_name(f"\nIngresa el nombre del producto a eliminar: ")
-    if name in inventory.keys():
-        del inventory[name]
+    if product_name in inventory.keys():
+        del inventory[product_name]
+        print(f"\nEl producto {product_name} ha sido eliminado del inventario.")
     else:
-        print("Producto no encontrado.")
-
-def calculate_total_inventory_value(inventory:dict = {}):
-    """
-    Function to calculate the total value of the inventory.
-
-    Parameters:
-    inventory: dict, inventory of the products.
-    """
-    return sum(map(lambda x: x[0], inventory.values()))
+        print("El producto no se encuentra en el inventario.")
 
 def menu_1():
     """
     Function to display the first menu.
     """
-    print("""\nMenú de funciones: 
+    print("""\nMenú de opciones: 
     1. Añadir producto.
     2. Buscar producto.
     3. Actualizar precio.
@@ -180,24 +164,30 @@ def main():
         option = input("Ingresa el número de la acción que deseas realizar: ")
         if option == "1":
             print("\n-- Añadir producto --")
-            product_name, product_price, product_quantity = request_product_data()
+            product_name = validate_product_name()
+            product_price = validate_product_price()
+            product_quantity = validate_product_quantity()
             add_product(product_name, product_price, product_quantity)
             condition = menu_2()
         elif option == "2":
             print("\n-- Buscar producto --")
-            search_product()
+            product_name = validate_product_name()
+            search_product(product_name)
             condition = menu_2()
         elif option == "3":
             print("\n-- Actualizar precio --")
-            update_product_price()
+            product_name = validate_product_name()
+            new_product_price = validate_product_price()
+            update_product_price(product_name, new_product_price)
             condition = menu_2()
         elif option == "4":
             print("\n-- Eliminar producto --")
-            delete_product()
+            product_name = validate_product_name()
+            delete_product(product_name)
             condition = menu_2()
         elif option == "5":
             print("\n-- Calcular el valor total del inventario --")
-            print(calculate_total_inventory_value())
+            print(sum(map(lambda x: x[0], inventory.values())))
             condition = menu_2()
         elif option == "6":
             print("\n-- Ver el inventario --")
