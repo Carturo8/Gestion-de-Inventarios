@@ -140,14 +140,71 @@ def calculate_total_inventory_value(inventory:dict = {}):
     """
     return sum(map(lambda x: x[0], inventory.values()))
 
-# add_product()
-# search_product()
-# update_product_price()
-# delete_product()
+def menu_1():
+    """
+    Function to display the first menu.
+    """
+    print("""\nMenú de funciones: 
+    1. Añadir producto.
+    2. Buscar producto.
+    3. Actualizar precio.
+    4. Eliminar producto.
+    5. Calcular el valor total del inventario.
+    6. Ver el inventario.
+   --> Ingrese otro valor para salir.
+    """)
 
-print(f"\nEl inventario es: {inventory}")
+def menu_2():
+    """
+    Function to display the second menu and return a boolean value indicating whether to continue.
+    """
+    print("""\nMenú de opciones:
+    1. Volver al menú principal.
+   --> Ingrese otro valor para salir.""")
+    option = input("\nIngresa la opción deseada: ")
+    condition = True
+    if option == "1":
+        menu_1()
+    else:
+        condition = False
+        print("Gracias por usar el programa.")
+    return condition
 
-#def calculate_total_inventory_value
-inv = {'A': (24523.0, 2), 'C': (12345.0, 5)}
-total = sum(map(lambda x: x[0], inv.values()))
-print(total)
+def main():
+    """
+    Function to run the program.
+    """
+    condition = True
+    menu_1()
+    while condition:
+        option = input("Ingresa el número de la acción que deseas realizar: ")
+        if option == "1":
+            print("\n-- Añadir producto --")
+            add_product()
+            condition = menu_2()
+        elif option == "2":
+            print("\n-- Buscar producto --")
+            search_product()
+            condition = menu_2()
+        elif option == "3":
+            print("\n-- Actualizar precio --")
+            update_product_price()
+            condition = menu_2()
+        elif option == "4":
+            print("\n-- Eliminar producto --")
+            delete_product()
+            condition = menu_2()
+        elif option == "5":
+            print("\n-- Calcular el valor total del inventario --")
+            print(calculate_total_inventory_value())
+            condition = menu_2()
+        elif option == "6":
+            print("\n-- Ver el inventario --")
+            print(f"\nEl inventario es: {inventory}")
+            condition = menu_2()
+        else:
+            condition = False
+            print("Gracias por usar el programa.")
+
+if __name__ == "__main__":
+    main()
