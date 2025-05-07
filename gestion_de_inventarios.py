@@ -5,72 +5,72 @@ inventory:dict = {}
 def validate_product_name(product_name:str = ""):
     """
     Function to validate the product name.
-
-    Parameters:
-    product_name: str, name of the product.
     """
-    while True:
-        name = input(product_name).strip()
-        if len(name) > 25:
+    condition = True
+    while condition:
+        product_name = input("\nIngresa el nombre del producto: ").strip()
+        if len(product_name) > 25:
             print("El nombre del producto no debe exceder los 25 caracteres.")
-        elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", name):
-            print("Entrada inválida. Ingresa un nombre válido.")
+        elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", product_name):
+            print("El nombre del producto solo puede contener letras y espacios.")
         else:
-            name = name.capitalize()
-            return name
+            product_name = product_name.capitalize()
+            condition = False
+    return product_name
 
 def validate_product_price(product_price:float = 0.0):
     """
     Function to validate the price of the product.
-
-    Parameters:
-    product_price: float, price of the product.
     """
-    while True:
+    condition = True
+    while condition:
         try:
-            price = round(float(input(product_price)), 2)
-            if price >= 0:
-                return price
+            product_price = round(float(input("\nIngresa el precio del producto: ")), 2)
+            if product_price >= 0:
+                condition = False
             else:
                 print("El número debe ser positivo.")
         except ValueError:
             print("Entrada inválida. Ingresa un número real igual o mayor que cero.")
+    return product_price
 
 def validate_product_quantity(product_quantity:int = 0):
     """
     Function to validate the quantity of the product.
-
-    Parameters:
-    product_quantity: float, price of the product.
     """
-    while True:
+    condition = True
+    while condition:
         try:
-            quantity = int(input(product_quantity))
-            if quantity >= 0:
-                return quantity
+            product_quantity = int(input("\nIngresa la cantidad disponible del producto: "))
+            if product_quantity >= 0:
+                condition = False
             else:
                 print("El número debe ser positivo.")
         except ValueError:
             print("Entrada inválida. Ingresa un número entero igual o mayor que cero.")
+    return product_quantity
+
+def request_product_data():
+    """
+    Function to request product data.
+    """
+    product_name = validate_product_name()
+    product_price = validate_product_price()
+    product_quantity = validate_product_quantity()
+    return product_name, product_price, product_quantity
 
 def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0):
     """
     Function to add a product to the inventory.
-
-    Parameters:
-    product_name: str, name of the product.
-    product_price: float, price of the product.
-    product_quantity: int, quantity of the product.
     """
     condition = True
     while condition:
-        name = validate_product_name("\nIngresa el nombre del producto: ")
-        price = validate_product_price(f"\nIngresa el precio del producto '{name}': ")
-        quantity = validate_product_quantity(f"\nIngresa la cantidad disponible del producto '{name}': ")
-        inventory[name] = (price, quantity)
+        inventory[product_name] = (product_price, product_quantity)
         print("\nDesea ingresar otro producto? (s/n): ")
         if input().lower() != "s":
             condition = False
+        else:
+            product_name, product_price, product_quantity = request_product_data()
 
 def search_product(product_name:str = ""):
     """
@@ -180,7 +180,8 @@ def main():
         option = input("Ingresa el número de la acción que deseas realizar: ")
         if option == "1":
             print("\n-- Añadir producto --")
-            add_product()
+            product_name, product_price, product_quantity = request_product_data()
+            add_product(product_name, product_price, product_quantity)
             condition = menu_2()
         elif option == "2":
             print("\n-- Buscar producto --")
