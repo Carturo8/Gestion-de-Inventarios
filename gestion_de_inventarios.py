@@ -171,7 +171,7 @@ def main():
     """
     condition = True
     while condition:
-        option = menu_1()[0]
+        option = menu_1()
         if option == "1":
             print("\n-- Añadir producto --")
             product_name = validate_product_name()
