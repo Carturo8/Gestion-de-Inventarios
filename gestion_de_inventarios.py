@@ -256,18 +256,7 @@ def main() -> None:
     """
     Main function to run the inventory management program.
 
-    This function implements the main program loop and handles all
-    inventory system operations:
-    1. Add new products to inventory
-    2. Search for existing products
-    3. Update product prices
-    4. Remove products from inventory
-    5. Calculate total inventory value
-    6. Display complete inventory
-    7. Exit program
-
-    The program continues running until the user selects
-    the exit option (7).
+    The program continues running until the user selects the exit option (7).
 
     Returns:
         None: This function doesn't return any value.
@@ -283,6 +272,8 @@ def main() -> None:
         if option == "1":
             print("\n-------------------- AÑADIR PRODUCTO --------------------")
             product_name = validate_product_name()
+            product_price:float = 0.0
+            product_quantity:int = 0
             if not product_name in inventory.keys():
                 product_price = validate_product_price()
                 product_quantity = validate_product_quantity()
