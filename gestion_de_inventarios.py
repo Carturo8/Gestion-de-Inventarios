@@ -135,7 +135,7 @@ def delete_product(product_name:str = "") -> None:
         else:
             product_name = validate_product_name()
 
-def menu_1() -> str:
+def menu() -> str:
     """
     Function to display the first menu.
     """
@@ -149,25 +149,7 @@ def menu_1() -> str:
     7. Salir.
     """)
     option = input("Ingresa el número de la acción que deseas realizar: ")
-    condition = True
-    if option == "7":
-        condition = False
-        print("Gracias por usar el programa.")
-    return option, condition
-
-def menu_2() -> bool:
-    """
-    Function to display the second menu and return a boolean value indicating whether to continue.
-    """
-    print("""\nMenú de opciones:
-    1. Volver al menú principal.
-   --> Ingrese otro valor para salir.""")
-    option = input("\nIngresa la opción deseada: ")
-    condition = True
-    if option != "1":
-        condition = False
-        print("Gracias por usar el programa.")
-    return condition
+    return option
 
 def main() -> None:
     """
@@ -175,42 +157,38 @@ def main() -> None:
     """
     condition = True
     while condition:
-        option = menu_1()[0]
+        option = menu()[0]
         if option == "1":
-            print("\n-- Añadir producto --")
+            print("\n---------- AÑADIR PRODUCTO ----------")
             product_name = validate_product_name()
             product_price = validate_product_price()
             product_quantity = validate_product_quantity()
             add_product(product_name, product_price, product_quantity)
-            condition = menu_2()
         elif option == "2":
-            print("\n-- Buscar producto --")
+            print("\n---------- BUSCAR PRODUCTO ----------")
             product_name = validate_product_name()
             search_product(product_name)
-            condition = menu_2()
         elif option == "3":
-            print("\n-- Actualizar precio --")
+            print("\n---------- ACTUALIZAR PRECIO ----------")
             product_name = validate_product_name()
             new_product_price = validate_product_price()
             update_product_price(product_name, new_product_price)
-            condition = menu_2()
         elif option == "4":
-            print("\n-- Eliminar producto --")
+            print("\n---------- ELIMINAR PRODUCTO  ----------")
             product_name = validate_product_name()
             delete_product(product_name)
-            condition = menu_2()
         elif option == "5":
-            print("\n-- Calcular el valor total del inventario --")
+            print("\n---------- VALOR TOTAL DEL INVENTARIO ----------")
             total_value = sum(map(lambda x: x[0] * x[1], inventory.values()))
             print(f"\nEl valor total del inventario es: ${total_value:.2f}")
-            condition = menu_2()
         elif option == "6":
-            print("\n-- Ver el inventario --")
+            print("\n---------- INVENTARIO ----------")
             print(f"\nEl inventario es: {inventory}")
-            condition = menu_2()
-        else:
+        elif option == "7":
             condition = False
-            print("Gracias por usar el programa.")
+            print("\nGracias por usar el programa.")
+        else:
+            print("\nOpción incorrecta. Ingresa una opción válida.")
 
 if __name__ == "__main__":
     main()
