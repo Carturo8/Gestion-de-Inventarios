@@ -2,7 +2,7 @@ import re
 
 inventory:dict = {}
 
-def validate_product_name(product_name:str = ""):
+def validate_product_name(product_name:str = "") -> str:
     """
     Function to validate the product name.
     """
@@ -18,7 +18,7 @@ def validate_product_name(product_name:str = ""):
             condition = False
     return product_name.capitalize()
 
-def validate_product_price(product_price:float = 0.0):
+def validate_product_price(product_price:float = 0.0) -> float:
     """
     Function to validate the price of the product.
     """
@@ -34,7 +34,7 @@ def validate_product_price(product_price:float = 0.0):
             print("Entrada inválida. Ingresa un número real igual o mayor que cero.")
     return product_price
 
-def validate_product_quantity(product_quantity:int = 0):
+def validate_product_quantity(product_quantity:int = 0) -> int:
     """
     Function to validate the quantity of the product.
     """
@@ -50,7 +50,7 @@ def validate_product_quantity(product_quantity:int = 0):
             print("Entrada inválida. Ingresa un número entero igual o mayor que cero.")
     return product_quantity
 
-def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0):
+def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0) -> None:
     """
     Function to add a product to the inventory.
     """
@@ -65,7 +65,7 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
             product_price = validate_product_price()
             product_quantity = validate_product_quantity()
 
-def search_product(product_name:str = ""):
+def search_product(product_name:str = "") -> tuple[float, int]:
     """
     Function to search a product in the inventory.
 
@@ -93,7 +93,7 @@ def search_product(product_name:str = ""):
             product_name = validate_product_name()
     return product_price, product_quantity
 
-def update_product_price(product_name:str = "", new_product_price:float = 0.0):
+def update_product_price(product_name:str = "", new_product_price:float = 0.0) -> None:
     """
     Function to update the price of a product in the inventory.
 
@@ -115,7 +115,7 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0):
             product_name = validate_product_name()
             new_product_price = validate_product_price()
 
-def delete_product(product_name:str = ""):
+def delete_product(product_name:str = "") -> None:
     """
     Function to delete a product from the inventory.
 
@@ -135,7 +135,7 @@ def delete_product(product_name:str = ""):
         else:
             product_name = validate_product_name()
 
-def menu_1():
+def menu_1() -> str:
     """
     Function to display the first menu.
     """
@@ -146,12 +146,16 @@ def menu_1():
     4. Eliminar producto.
     5. Calcular el valor total del inventario.
     6. Ver el inventario.
-   --> Ingrese otro valor para salir.
+    7. Salir.
     """)
     option = input("Ingresa el número de la acción que deseas realizar: ")
-    return option
+    condition = True
+    if option == "7":
+        condition = False
+        print("Gracias por usar el programa.")
+    return option, condition
 
-def menu_2():
+def menu_2() -> bool:
     """
     Function to display the second menu and return a boolean value indicating whether to continue.
     """
@@ -165,7 +169,7 @@ def menu_2():
         print("Gracias por usar el programa.")
     return condition
 
-def main():
+def main() -> None:
     """
     Function to run the program.
     """
@@ -197,7 +201,7 @@ def main():
             condition = menu_2()
         elif option == "5":
             print("\n-- Calcular el valor total del inventario --")
-            total_value = sum(map(lambda x: x[0], inventory.values()))
+            total_value = sum(map(lambda x: x[0] * x[1], inventory.values()))
             print(f"\nEl valor total del inventario es: ${total_value:.2f}")
             condition = menu_2()
         elif option == "6":
