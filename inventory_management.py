@@ -1,7 +1,5 @@
 import re
 
-from cloudinit.util import uptime
-
 inventory:dict = {}
 
 def validate_product_name(product_name:str = "") -> str:
