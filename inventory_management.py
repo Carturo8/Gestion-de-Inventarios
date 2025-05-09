@@ -241,7 +241,7 @@ def menu() -> str:
     Returns:
         str: The user's selected option as a string (from "1" to "7").
     """
-    print("\033[96m\n📋 Inventory Management Menu:\033[0m")
+    print("\033[96m\n---------- 📊 Inventory Management Menu ----------\033[0m")
     print("""
 1.➕ Add product
 2.🔍 Search product
