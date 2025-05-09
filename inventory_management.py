@@ -19,11 +19,11 @@ def validate_product_name(product_name:str = "") -> str:
     """
     condition = True
     while condition:
-        product_name = input("\nIngresa el nombre del producto: ").strip()
+        product_name = input("\nEnter the product name: ").strip()
         if len(product_name) > 25:
-            print("El nombre del producto no debe exceder los 25 caracteres.")
+            print("The product name must not exceed 25 characters.")
         elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", product_name):
-            print("Nombre inválido. Ingrese un nombre de producto válido.")
+            print("Invalid name. Please enter a valid product name.")
         else:
             product_name = product_name.capitalize()
             condition = False
@@ -47,13 +47,13 @@ def validate_product_price(product_price:float = 0.0) -> float:
     condition = True
     while condition:
         try:
-            product_price = round(float(input("\nIngresa el precio del producto: ")), 2)
+            product_price = round(float(input("\nEnter the product price: ")), 2)
             if product_price >= 0:
                 condition = False
             else:
-                print("Precio inválido. El precio debe ser un número igual o mayor que cero.")
+                print("Invalid price. Price must be a number equal to or greater than zero.")
         except ValueError:
-            print("Entrada inválida. Ingresa un número real igual o mayor que cero.")
+            print("Invalid input. Enter a real number equal to or greater than zero.")
     return product_price
 
 def validate_product_quantity(product_quantity:int = 0) -> int:
@@ -73,13 +73,13 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
     condition = True
     while condition:
         try:
-            product_quantity = int(input("\nIngresa la cantidad disponible del producto: "))
+            product_quantity = int(input("\nEnter the available product quantity: "))
             if product_quantity >= 0:
                 condition = False
             else:
-                print("Cantidad inválida. La cantidad debe ser un número igual o mayor que cero.")
+                print("Invalid quantity. Quantity must be a number equal to or greater than zero.")
         except ValueError:
-            print("Entrada inválida. Ingresa un número entero igual o mayor que cero.")
+            print("Invalid input. Enter an integer equal to or greater than zero.")
     return product_quantity
 
 def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0) -> None:
@@ -106,11 +106,11 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
     condition = True
     while condition:
         if product_name in inventory.keys():
-            print("\nEl producto ya se encuentra en el inventario.")
+            print("\nThe product is already in the inventory.")
         else:
             inventory[product_name] = (product_price, product_quantity)
-        print("\n¿Deseas añadir otro producto? (s/n): ")
-        if input().lower() != "s":
+        print("\nDo you want to add another product? (y/n): ")
+        if input().lower() != "y":
             condition = False
         else:
             product_name = validate_product_name()
@@ -147,16 +147,16 @@ def search_product(product_name:str = "") -> tuple[float, int]:
     while condition:
         if product_name in inventory.keys():
             print(f"""
-    ¡Producto encontrado!
-    - Nombre del producto: '{product_name}'
-    - Precio: ${inventory[product_name][0]}
-    - Cantidad disponible: {inventory[product_name][1]}""")
+        Product found!
+        - Product name: '{product_name}'
+        - Price: ${inventory[product_name][0]}
+        - Available quantity: {inventory[product_name][1]}""")
             product_price = inventory[product_name][0]
             product_quantity = inventory[product_name][1]
         else:
-            print("El producto no se encuentra en el inventario.")
-        print("\n¿Deseas buscar otro producto? (s/n): ")
-        if input().lower() != "s":
+            print("The product is not in the inventory.")
+        print("\nDo you want to search for another product? (y/n): ")
+        if input().lower() != "y":
             condition = False
         else:
             product_name = validate_product_name()
@@ -187,11 +187,11 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
     while condition:
         if product_name in inventory.keys():
             inventory[product_name] = (new_product_price, inventory[product_name][1])
-            print(f"\nEl precio del producto '{product_name}' ha sido actualizado a ${new_product_price}.")
+            print(f"\nThe price of product '{product_name}' has been updated to ${new_product_price}.")
         else:
-            print("\nEl producto no se encuentra en el inventario.")
-        print("\n¿Deseas actualizar el precio de otro producto? (s/n): ")
-        if input().lower() != "s":
+            print("\nThe product is not in the inventory.")
+        print("\nDo you want to update another product's price? (y/n): ")
+        if input().lower() != "y":
             condition = False
         else:
             product_name = validate_product_name()
@@ -220,11 +220,11 @@ def delete_product(product_name:str = "") -> None:
     while condition:
         if product_name in inventory.keys():
             del inventory[product_name]
-            print(f"\nEl producto '{product_name}' ha sido eliminado del inventario.")
+            print(f"\nThe product '{product_name}' has been deleted from the inventory.")
         else:
-            print("\nEl producto no se encuentra en el inventario.")
-        print("\n¿Deseas eliminar otro producto? (s/n): ")
-        if input().lower() != "s":
+            print("\nThe product is not in the inventory.")
+        print("\nDo you want to delete another product? (y/n): ")
+        if input().lower() != "y":
             condition = False
         else:
             product_name = validate_product_name()
@@ -240,16 +240,16 @@ def menu() -> str:
     Note: This function only displays the menu and captures input.
     It does not validate the input or execute the selected operations.
     """
-    print("""\nMenú de opciones:
-    1. Añadir producto.
-    2. Buscar producto.
-    3. Actualizar precio.
-    4. Eliminar producto.
-    5. Calcular el valor total del inventario.
-    6. Ver el inventario.
-    7. Salir.
-    """)
-    option = input("Ingresa el número de la acción que deseas realizar: ")
+    print("""\nOptions Menu:
+        1. Add product
+        2. Search product
+        3. Update price
+        4. Delete product
+        5. Calculate total inventory value
+        6. View inventory
+        7. Exit
+        """)
+    option = input("Enter the number of the action you want to perform: ")
     return option
 
 def main() -> None:
@@ -270,7 +270,7 @@ def main() -> None:
     while condition:
         option = menu()
         if option == "1":
-            print("\n-------------------- AÑADIR PRODUCTO --------------------")
+            print("\n-------------------- ADD PRODUCT --------------------")
             product_name = validate_product_name()
             product_price:float = 0.0
             product_quantity:int = 0
@@ -279,30 +279,30 @@ def main() -> None:
                 product_quantity = validate_product_quantity()
             add_product(product_name, product_price, product_quantity)
         elif option == "2":
-            print("\n-------------------- BUSCAR PRODUCTO --------------------")
+            print("\n-------------------- SEARCH PRODUCT --------------------")
             product_name = validate_product_name()
             search_product(product_name)
         elif option == "3":
-            print("\n-------------------- ACTUALIZAR PRECIO --------------------")
+            print("\n-------------------- UPDATE PRICE --------------------")
             product_name = validate_product_name()
             new_product_price = validate_product_price()
             update_product_price(product_name, new_product_price)
         elif option == "4":
-            print("\n-------------------- ELIMINAR PRODUCTO --------------------")
+            print("\n-------------------- DELETE PRODUCT --------------------")
             product_name = validate_product_name()
             delete_product(product_name)
         elif option == "5":
-            print("\n-------------------- VALOR TOTAL DEL INVENTARIO --------------------")
+            print("\n-------------------- TOTAL INVENTORY VALUE --------------------")
             total_value = sum(map(lambda x: x[0] * x[1], inventory.values()))
-            print(f"\nEl valor total del inventario es: ${total_value:.2f}")
+            print(f"\nThe total inventory value is: ${total_value:.2f}")
         elif option == "6":
-            print("\n-------------------- INVENTARIO --------------------")
-            print(f"\nEl inventario es: {inventory}")
+            print("\n-------------------- INVENTORY --------------------")
+            print(f"\nThe inventory is: {inventory}")
         elif option == "7":
             condition = False
-            print("\nGracias por usar el programa de gestión de inventarios. Hasta luego!")
+            print("\nThank you for using the inventory management program. Goodbye!")
         else:
-            print("\nOpción incorrecta. Ingresa una opción válida.")
+            print("\nIncorrect option. Please enter a valid option.")
 
 if __name__ == "__main__":
     main()
