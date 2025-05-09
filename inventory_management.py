@@ -10,6 +10,7 @@ def validate_product_name(product_name:str = "") -> str:
     - Maximum length of 25 characters
     - Contains only letters and spaces
     - Supports Spanish characters (á, é, í, ó, ú, ñ)
+    - Only single spaces between words
 
     Args:
         product_name (str, optional): Initial product name to validate. Defaults to "".
@@ -19,13 +20,12 @@ def validate_product_name(product_name:str = "") -> str:
     """
     condition = True
     while condition:
-        product_name = input("\nEnter the product name: ").strip()
+        product_name = " ".join(input("\nEnter the product name: ").split())
         if len(product_name) > 25:
             print("The product name must not exceed 25 characters.")
         elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", product_name):
             print("Invalid name. Please enter a valid product name.")
         else:
-            product_name = product_name.capitalize()
             condition = False
     return product_name.capitalize()
 
@@ -149,7 +149,7 @@ def search_product(product_name:str = "") -> tuple[float, int]:
             print(f"""
         Product found!
         - Product name: '{product_name}'
-        - Price: ${inventory[product_name][0]}
+        - Price: $ {inventory[product_name][0]}
         - Available quantity: {inventory[product_name][1]}""")
             product_price = inventory[product_name][0]
             product_quantity = inventory[product_name][1]
@@ -187,7 +187,7 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
     while condition:
         if product_name in inventory.keys():
             inventory[product_name] = (new_product_price, inventory[product_name][1])
-            print(f"\nThe price of product '{product_name}' has been updated to ${new_product_price}.")
+            print(f"\nThe price of product '{product_name}' has been updated to $ {new_product_price}.")
         else:
             print("\nThe product is not in the inventory.")
         print("\nDo you want to update another product's price? (y/n): ")
@@ -294,10 +294,17 @@ def main() -> None:
         elif option == "5":
             print("\n-------------------- CALCULATE TOTAL INVENTORY VALUE --------------------")
             total_value = sum(map(lambda x: x[0] * x[1], inventory.values()))
-            print(f"\nThe total inventory value is: ${total_value:.2f}")
+            print(f"\nThe total inventory value is: $ {total_value:.2f}")
         elif option == "6":
-            print("\n-------------------- VIEW INVENTORY --------------------")
-            print(f"\nThe inventory is: {inventory}")
+            print("\n-------------------- VIEW INVENTORY --------------------\n")
+            if inventory:
+                print(f"{'Product Name':<25}  {'Price':<17}  {'Available Quantity':<15}")
+                print("-" * 65)
+                for product, details in inventory.items():
+                    price, quantity = details
+                    print(f"{product:<25}  $ {price:<15.2f}  {quantity:<15}")
+            else:
+                print("The inventory is empty.")
         elif option == "7":
             condition = False
             print("\nThank you for using the inventory management program. Goodbye!")
