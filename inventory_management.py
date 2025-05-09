@@ -1,5 +1,7 @@
 import re
 
+from cloudinit.util import uptime
+
 inventory:dict = {}
 
 def validate_product_name(product_name:str = "") -> str:
@@ -27,6 +29,7 @@ def validate_product_name(product_name:str = "") -> str:
         else:
             condition = False
     return product_name
+
 
 def validate_product_price(product_price:float = 0.0) -> float:
     """
@@ -57,6 +60,7 @@ def validate_product_price(product_price:float = 0.0) -> float:
             print("\033[93m⚠️ Invalid input. Please enter a valid number (e.g., 19.99).\033[0m")
     return product_price
 
+
 def validate_product_quantity(product_quantity:int = 0) -> int:
     """
     Validate and format a product quantity according to specific rules.
@@ -84,6 +88,7 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
         except ValueError:
             print("\033[93m⚠️ Invalid input. Please enter a whole number (e.g., 15).\033[0m")
     return product_quantity
+
 
 def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0) -> None:
     """
@@ -122,6 +127,7 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
             else:
                 continue
 
+
 def search_product(product_name:str = "") -> tuple[float, int]:
     """
     Search for a product in the inventory and display its information.
@@ -158,6 +164,7 @@ def search_product(product_name:str = "") -> tuple[float, int]:
             # Validate a new product name
             product_name = validate_product_name()
     return product_price, product_quantity
+
 
 def update_product_price(product_name:str = "", new_product_price:float = 0.0) -> None:
     """
@@ -197,7 +204,11 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
         else:
             # Validate new product information
             product_name = validate_product_name()
-            new_product_price = validate_product_price()
+            if product_name in inventory.keys():
+                new_product_price = validate_product_price()
+            else:
+                continue
+
 
 def delete_product(product_name:str = "") -> None:
     """
@@ -234,6 +245,7 @@ def delete_product(product_name:str = "") -> None:
             # Validate a new product name
             product_name = validate_product_name()
 
+
 def menu() -> str:
     """
     Display the main menu of the inventory management system and get user input.
@@ -253,6 +265,7 @@ def menu() -> str:
     """)
     option = input("👉 Enter the number of the action you want to perform: ")
     return option
+
 
 def main() -> None:
     """
@@ -282,8 +295,12 @@ def main() -> None:
         elif option == "3":
             print("\033[96m\n💲 ------------------ UPDATE PRICE -------------------\033[0m")
             product_name = validate_product_name()
-            new_product_price = validate_product_price()
-            update_product_price(product_name, new_product_price)
+            new_product_price:float = 0.0
+            if product_name in inventory.keys():
+                new_product_price = validate_product_price()
+                update_product_price(product_name, new_product_price)
+            else:
+                update_product_price(product_name, new_product_price)
 
         elif option == "4":
             print("\033[96m\n🗑️ ------------------ DELETE PRODUCT ------------------\033[0m")
@@ -311,6 +328,7 @@ def main() -> None:
             print("\033[92m\n👋 Thank you for using the inventory management program. Goodbye!\033[0m")
         else:
             print("\033[91m\n❌ Invalid option. Please enter a number between 1 and 7.\033[0m")
+
 
 if __name__ == "__main__":
     main()
