@@ -46,8 +46,10 @@ def validate_product_price(product_price:float = 0.0) -> float:
     while condition:
         try:
             product_price = round(float(input("\n💰 Enter the product price: ")), 2)
-            if product_price >= 0:
+            if 0 <= product_price <= 1000000000:
                 condition = False
+            elif product_price > 1000000000:
+                print("\033[91m❌ Price exceeds the maximum allowed ($1,000,000,000).\033[0m")
             else:
                 print("\033[91m❌ Invalid price. It must be 0 or greater.\033[0m")
         except ValueError:
@@ -61,6 +63,7 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
 
     - Must be a non-negative integer
     - No decimals allowed
+    - Maximum allowed quantity is 100,000,000
 
     Args:
         product_quantity (int, optional): Initial quantity to validate. Defaults to 0.
@@ -72,8 +75,10 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
     while condition:
         try:
             product_quantity = int(input("\n📦 Enter the available product quantity: "))
-            if product_quantity >= 0:
+            if 0 <= product_quantity <= 100000000:
                 condition = False
+            elif product_quantity > 100000000:
+                print("\033[91m❌ Quantity exceeds the maximum allowed (100,000,000).\033[0m")
             else:
                 print("\033[91m❌ Quantity must be 0 or greater.\033[0m")
         except ValueError:
@@ -85,11 +90,8 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
     """
     Add one or multiple products to the inventory.
 
-    This function allows adding products to the inventory and provides the option
-    to continue adding more products in a loop. For each product, it stores:
-    - Product name
-    - Product price
-    - Product quantity
+    - Allows adding products and continuing in a loop.
+    - Stores product name, price, and quantity.
 
     Args:
         product_name (str, optional): Name of the product. Defaults to "".
@@ -98,66 +100,62 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
 
     Returns:
         None: This function modifies the inventory directly and doesn't return a value.
-
-    Note: The inventory is modified using a global dictionary where products are stored
-    as tuples containing (price, quantity).
     """
     condition = True
     while condition:
+        # Check if the product already exists
         if product_name in inventory.keys():
-            print("\nThe product is already in the inventory.")
+            print("\033[91m❌ The product is already in the inventory.\033[0m")
         else:
             inventory[product_name] = (product_price, product_quantity)
-        print("\nDo you want to add another product? (y/n): ")
+            print(f"\033[94m\n✅ Product '{product_name}':(${product_price}, {product_quantity} unit(s)) added successfully!\033[0m")
+        # Ask if the user wants to add another product
+        print("\n🔄 Do you want to add another product? (y/n): ", end = "")
         if input().lower() != "y":
             condition = False
         else:
+            # Validate new product information
             product_name = validate_product_name()
-            if not product_name in inventory.keys():
+            if product_name not in inventory.keys():
                 product_price = validate_product_price()
                 product_quantity = validate_product_quantity()
             else:
+                print("\033[93m⚠️ The product already exists. Try a different name.\033[0m")
                 continue
 
 def search_product(product_name:str = "") -> tuple[float, int]:
     """
     Search for a product in the inventory and display its information.
 
-    This function allows searching for products in the inventory and provides the option
-    to continue searching for more products in a loop. For each found product, it displays:
-    - Product name
-    - Product price
-    - Product quantity
+    - Displays product name, price, and quantity if found.
+    - Allows repeated searches.
 
     Args:
         product_name (str, optional): Name of the product to search. Defaults to "".
 
     Returns:
-        tuple[float, int]: A tuple containing:
-            - float: Price of the last searched product (0.0 if not found)
-            - int: Quantity of the last searched product (0 if not found)
-
-    Note: The function returns the information of the last product searched,
-    even if multiple searches were performed during execution.
+        tuple[float, int]: Price and quantity of the last searched product.
     """
     product_price:float = 0.0
     product_quantity:int = 0
     condition = True
     while condition:
+        # Check if the product exists in the inventory
         if product_name in inventory.keys():
-            print(f"""
-        Product found!
-        - Product name: '{product_name}'
-        - Price: $ {inventory[product_name][0]}
-        - Available quantity: {inventory[product_name][1]}""")
-            product_price = inventory[product_name][0]
-            product_quantity = inventory[product_name][1]
+            product_price, product_quantity = inventory[product_name]
+            print(f"""\033[94m
+🔍 Product found!
+🛒 Name: {product_name}
+💰 Price: ${product_price}
+📦 Quantity available: {product_quantity}\033[0m""")
         else:
-            print("The product is not in the inventory.")
-        print("\nDo you want to search for another product? (y/n): ")
+            print(f"\033[91m❌ The product '{product_name}' is not in the inventory.\033[0m")
+        # Ask if the user wants to search for another product
+        print("\n🔄 Do you want to search for another product? (y/n): ", end = "")
         if input().lower() != "y":
             condition = False
         else:
+            # Validate a new product name
             product_name = validate_product_name()
     return product_price, product_quantity
 
@@ -165,11 +163,9 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
     """
     Update the price of one or multiple products in the inventory.
 
-    This function allows updating the price of products in the inventory and provides
-    the option to continue updating more product prices in a loop. For each update:
-    - Verifies the product exists in inventory
-    - Updates the price while maintaining the original quantity
-    - Confirms the update to the user
+    - Verifies if the product exists
+    - Updates only the price, keeping the quantity unchanged
+    - Displays confirmation and allows multiple updates
 
     Args:
         product_name (str, optional): Name of the product to update. Defaults to "".
@@ -177,22 +173,28 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
 
     Returns:
         None: This function modifies the inventory directly and doesn't return a value.
-
-    Note: The inventory is modified using a global dictionary where products are stored
-    as tuples containing (price, quantity). Only the price is updated, keeping the
-    original quantity intact.
     """
     condition = True
     while condition:
+        # Check if the product exists in the inventory
         if product_name in inventory.keys():
-            inventory[product_name] = (new_product_price, inventory[product_name][1])
-            print(f"\nThe price of product '{product_name}' has been updated to $ {new_product_price}.")
+            old_product_price = inventory[product_name][0]
+            product_quantity = inventory[product_name][1]
+            inventory[product_name] = (new_product_price, product_quantity)
+            print(f"""\033[94m
+💱 Product price updated!
+🛒 Name: {product_name}
+💸 Old price: ${old_product_price}
+💰 New price: ${new_product_price}
+📦 Quantity available: {product_quantity}\033[0m""")
         else:
-            print("\nThe product is not in the inventory.")
-        print("\nDo you want to update another product's price? (y/n): ")
+            print(f"\033[91m❌ The product '{product_name}' is not in the inventory.\033[0m")
+        # Ask if the user wants to update another product's price
+        print("\n🔄 Do you want to update another product's price? (y/n): ", end = "")
         if input().lower() != "y":
             condition = False
         else:
+            # Validate new product information
             product_name = validate_product_name()
             new_product_price = validate_product_price()
 
@@ -200,32 +202,30 @@ def delete_product(product_name:str = "") -> None:
     """
     Delete one or multiple products from the inventory.
 
-    This function allows removing products from the inventory and provides the option
-    to continue deleting more products in a loop. For each deletion:
-    - Verifies the product exists in inventory
-    - Removes the product completely from the inventory
-    - Confirms the deletion to the user
+    - Verifies product existence
+    - Deletes product and confirms the action
+    - Allows multiple deletions in a loop
 
     Args:
         product_name (str, optional): Name of the product to delete. Defaults to "".
 
     Returns:
         None: This function modifies the inventory directly and doesn't return a value.
-
-    Note: The deletion is permanent and removes all associated information (price and quantity)
-    for the specified product from the inventory.
     """
     condition = True
     while condition:
+        # Check if the product exists in the inventory
         if product_name in inventory.keys():
             del inventory[product_name]
-            print(f"\nThe product '{product_name}' has been deleted from the inventory.")
+            print(f"\033[94m\n🗑️ The product '{product_name}' has been permanently deleted from the inventory.\033[0m")
         else:
-            print("\nThe product is not in the inventory.")
-        print("\nDo you want to delete another product? (y/n): ")
+            print(f"\033[93m⚠️ The product '{product_name}' is not in the inventory.\033[0m")
+        # Ask if the user wants to delete another product
+        print("\n🔄 Do you want to delete another product? (y/n): ", end = "")
         if input().lower() != "y":
             condition = False
         else:
+            # Validate a new product name
             product_name = validate_product_name()
 
 def menu() -> str:
