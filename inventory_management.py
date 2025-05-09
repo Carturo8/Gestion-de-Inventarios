@@ -34,6 +34,7 @@ def validate_product_price(product_price:float = 0.0) -> float:
 
     - Must be a positive number or zero
     - Must be a valid float number
+    - Maximum allowed price is 1,000,000,000
     - Rounds to 2 decimal places
 
     Args:
@@ -140,7 +141,8 @@ def search_product(product_name:str = "") -> tuple[float, int]:
         # Check if the product exists in the inventory
         if product_name in inventory.keys():
             product_price, product_quantity = inventory[product_name]
-            print(f"""\033[92m🔍 Product found!
+            print(f"\033[32m🔍 Product found!\033[0m")
+            print(f"""\033[92m-------------------------
 🛒 Name: {product_name}
 💰 Price: ${product_price}
 📦 Quantity available: {product_quantity}\033[0m""")
@@ -177,15 +179,14 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
             old_product_price = inventory[product_name][0]
             product_quantity = inventory[product_name][1]
             inventory[product_name] = (new_product_price, product_quantity)
-            print(f"""\033[92m
-💲 Product price updated!
-------------------------------
+            print(f"\033[32m💲 Product price updated!\033[0m")
+            print(f"""\033[92m-------------------------
 🛒 Name: {product_name}
 💸 Old price: ${old_product_price}
 💰 New price: ${new_product_price}
 📦 Quantity available: {product_quantity}\033[0m""")
         else:
-            print(f"\033[91m❌ The product '{product_name}' is not in the inventory.\033[0m")
+            print(f"\033[91m\n❌ The product '{product_name}' is not in the inventory.\033[0m")
         # Ask if the user wants to update another product's price
         print("\033[93m\n💲 Do you want to update another product's price? (y/n): \033[0m", end = "")
         if input().lower() != "y":
