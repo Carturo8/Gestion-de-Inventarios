@@ -6,11 +6,9 @@ def validate_product_name(product_name:str = "") -> str:
     """
     Validate and format a product name according to specific rules.
 
-    This function ensures that the product name meets the following criteria:
-    - Maximum length of 25 characters
-    - Contains only letters and spaces
-    - Supports Spanish characters (á, é, í, ó, ú, ñ)
-    - Only single spaces between words
+    - Max 25 characters
+    - Letters and spaces only (supports Spanish characters)
+    - Single spaces only
 
     Args:
         product_name (str, optional): Initial product name to validate. Defaults to "".
@@ -20,20 +18,20 @@ def validate_product_name(product_name:str = "") -> str:
     """
     condition = True
     while condition:
-        product_name = " ".join(input("\nEnter the product name: ").split())
+        product_name = " ".join(input("\n📝 Enter the product name: ").split())
         if len(product_name) > 25:
-            print("The product name must not exceed 25 characters.")
+            print("\033[91m❌ The product name must not exceed 25 characters.\033[0m")
         elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", product_name):
-            print("Invalid name. Please enter a valid product name.")
+            print("\033[93m⚠️ Only letters and spaces are allowed (including accents like á, é, ñ).\033[0m")
         else:
             condition = False
+    print(f"\033[92m✅ Product name accepted: {product_name.capitalize()}\033[0m")
     return product_name.capitalize()
 
 def validate_product_price(product_price:float = 0.0) -> float:
     """
     Validate and format a product price according to specific rules.
 
-    This function ensures that the product price meets the following criteria:
     - Must be a positive number or zero
     - Must be a valid float number
     - Rounds to 2 decimal places
@@ -47,39 +45,40 @@ def validate_product_price(product_price:float = 0.0) -> float:
     condition = True
     while condition:
         try:
-            product_price = round(float(input("\nEnter the product price: ")), 2)
+            product_price = round(float(input("\n💰 Enter the product price: ")), 2)
             if product_price >= 0:
                 condition = False
             else:
-                print("Invalid price. Price must be a number equal to or greater than zero.")
+                print("\033[91m❌ Invalid price. It must be 0 or greater.\033[0m")
         except ValueError:
-            print("Invalid input. Enter a real number equal to or greater than zero.")
+            print("\033[93m⚠️ Invalid input. Please enter a valid number (e.g., 19.99).\033[0m")
+    print(f"\033[92m✅ Price accepted: ${product_price}\033[0m")
     return product_price
 
 def validate_product_quantity(product_quantity:int = 0) -> int:
     """
     Validate and format a product quantity according to specific rules.
 
-    This function ensures that the product quantity meets the following criteria:
-    - Must be a positive integer or zero
-    - Cannot be a decimal number
+    - Must be a non-negative integer
+    - No decimals allowed
 
     Args:
         product_quantity (int, optional): Initial quantity to validate. Defaults to 0.
 
     Returns:
-        int: The validated quantity as an integer.
+        int: The validated quantity.
     """
     condition = True
     while condition:
         try:
-            product_quantity = int(input("\nEnter the available product quantity: "))
+            product_quantity = int(input("\n📦 Enter the available product quantity: "))
             if product_quantity >= 0:
                 condition = False
             else:
-                print("Invalid quantity. Quantity must be a number equal to or greater than zero.")
+                print("\033[91m❌ Quantity must be 0 or greater.\033[0m")
         except ValueError:
-            print("Invalid input. Enter an integer equal to or greater than zero.")
+            print("\033[93m⚠️ Invalid input. Please enter a whole number (e.g., 15).\033[0m")
+    print(f"\033[92m✅ Quantity accepted: {product_quantity} unit(s)\033[0m")
     return product_quantity
 
 def add_product(product_name:str = "", product_price:float = 0.0, product_quantity:int = 0) -> None:
