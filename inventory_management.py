@@ -32,9 +32,9 @@ def validate_product_price(product_price:float = 0.0) -> float:
     """
     Validate and format a product price according to specific rules.
 
-    - Must be a positive number or zero
+    - Must be a positive number (greater than 0)
     - Must be a valid float number
-    - Maximum allowed price is 1,000,000,000
+    - Cannot exceed 1,000,000,000
     - Rounds to 2 decimal places
 
     Args:
@@ -47,12 +47,12 @@ def validate_product_price(product_price:float = 0.0) -> float:
     while condition:
         try:
             product_price = round(float(input("\n💰 Enter the product price: ")), 2)
-            if 0 <= product_price <= 1000000000:
+            if 0 < product_price <= 1_000_000_000:
                 condition = False
-            elif product_price > 1000000000:
+            elif product_price > 1_000_000_000:
                 print("\033[91m❌ Price exceeds the maximum allowed ($1,000,000,000).\033[0m")
             else:
-                print("\033[91m❌ Invalid price. It must be 0 or greater.\033[0m")
+                print("\033[91m❌ Invalid price. The value must be greater than zero.\033[0m")
         except ValueError:
             print("\033[93m⚠️ Invalid input. Please enter a valid number (e.g., 19.99).\033[0m")
     return product_price
@@ -61,7 +61,7 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
     """
     Validate and format a product quantity according to specific rules.
 
-    - Must be a non-negative integer
+    - Must be a positive integer (greater than 0)
     - No decimals allowed
     - Maximum allowed quantity is 100,000,000
 
@@ -75,12 +75,12 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
     while condition:
         try:
             product_quantity = int(input("\n📦 Enter the available product quantity: "))
-            if 0 <= product_quantity <= 100000000:
+            if 0 < product_quantity <= 100_000_000:
                 condition = False
-            elif product_quantity > 100000000:
+            elif product_quantity > 100_000_000:
                 print("\033[91m❌ Quantity exceeds the maximum allowed (100,000,000).\033[0m")
             else:
-                print("\033[91m❌ Quantity must be 0 or greater.\033[0m")
+                print("\033[91m❌ Quantity must be greater than zero.\033[0m")
         except ValueError:
             print("\033[93m⚠️ Invalid input. Please enter a whole number (e.g., 15).\033[0m")
     return product_quantity
@@ -109,8 +109,9 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
             inventory[product_name] = (product_price, product_quantity)
             print(f"\033[92m\n➕ Product '{product_name}':(${product_price}, {product_quantity} unit(s)) added successfully!\033[0m")
         # Ask if the user wants to add another product
-        print("\033[93m\n➕ Do you want to add another product? (y/n): \033[0m", end = "")
-        if input().lower() != "y":
+        print(f"""\033[93m\n➕ Add another product? 
+(Press 'y' to add more / any other key to return to menu): \033[0m""", end = "")
+        if input().strip().lower() != "y":
             condition = False
         else:
             # Validate new product information
@@ -149,7 +150,8 @@ def search_product(product_name:str = "") -> tuple[float, int]:
         else:
             print(f"\033[91m❌ The product '{product_name}' is not in the inventory.\033[0m")
         # Ask if the user wants to search for another product
-        print("\033[93m\n🔍 Do you want to search for another product? (y/n): \033[0m", end = "")
+        print(f"""\033[93m\n🔍 Search for another product? 
+(Press 'y' to continue / any other key to return to menu): \033[0m""", end = "")
         if input().lower() != "y":
             condition = False
         else:
@@ -188,7 +190,8 @@ def update_product_price(product_name:str = "", new_product_price:float = 0.0) -
         else:
             print(f"\033[91m\n❌ The product '{product_name}' is not in the inventory.\033[0m")
         # Ask if the user wants to update another product's price
-        print("\033[93m\n💲 Do you want to update another product's price? (y/n): \033[0m", end = "")
+        print(f"""\033[93m\n💲 Update another product's price? 
+(Press 'y' to continue / any other key to return to menu): \033[0m""", end = "")
         if input().lower() != "y":
             condition = False
         else:
@@ -223,7 +226,8 @@ def delete_product(product_name:str = "") -> None:
         else:
             print(f"\033[91m❌ The product '{product_name}' is not in the inventory.\033[0m")
         # Ask if the user wants to delete another product
-        print("\033[93m\n🗑️ Do you want to delete another product? (y/n): \033[0m", end = "")
+        print(f"""\033[93m\n🗑️ Delete another product? 
+(Press 'y' to continue / any other key to return to menu): \033[0m""", end = "")
         if input().lower() != "y":
             condition = False
         else:
