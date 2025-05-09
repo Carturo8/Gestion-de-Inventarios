@@ -241,14 +241,14 @@ def menu() -> str:
     It does not validate the input or execute the selected operations.
     """
     print("""\nOptions Menu:
-        1. Add product
-        2. Search product
-        3. Update price
-        4. Delete product
-        5. Calculate total inventory value
-        6. View inventory
-        7. Exit
-        """)
+    1. Add product
+    2. Search product
+    3. Update price
+    4. Delete product
+    5. Calculate total inventory value
+    6. View inventory
+    7. Exit
+    """)
     option = input("Enter the number of the action you want to perform: ")
     return option
 
@@ -292,11 +292,11 @@ def main() -> None:
             product_name = validate_product_name()
             delete_product(product_name)
         elif option == "5":
-            print("\n-------------------- TOTAL INVENTORY VALUE --------------------")
+            print("\n-------------------- CALCULATE TOTAL INVENTORY VALUE --------------------")
             total_value = sum(map(lambda x: x[0] * x[1], inventory.values()))
             print(f"\nThe total inventory value is: ${total_value:.2f}")
         elif option == "6":
-            print("\n-------------------- INVENTORY --------------------")
+            print("\n-------------------- VIEW INVENTORY --------------------")
             print(f"\nThe inventory is: {inventory}")
         elif option == "7":
             condition = False
