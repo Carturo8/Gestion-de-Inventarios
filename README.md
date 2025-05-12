@@ -50,5 +50,6 @@ To use the program, simply clone this repository and run the `inventory_manageme
 git clone https://github.com/yourusername/inventory-management.git
 cd inventory-management
 python inventory_management.py
+```
 
 This project is licensed under the MIT License - see the LICENSE file for details.
