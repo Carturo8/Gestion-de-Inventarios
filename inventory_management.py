@@ -16,7 +16,7 @@ def validate_product_name(product_name:str = "") -> str:
     Returns:
         str: The validated and capitalized product name.
     """
-    condition = True
+    condition:bool = True
     while condition:
         product_name = " ".join(input("\n📝 Enter the product name: ").split())
         product_name = product_name.capitalize()
@@ -44,7 +44,7 @@ def validate_product_price(product_price:float = 0.0) -> float:
     Returns:
         float: The validated price rounded to 2 decimal places.
     """
-    condition = True
+    condition:bool = True
     while condition:
         try:
             product_price = round(float(input("\n💰 Enter the product price: ")), 2)
@@ -73,7 +73,7 @@ def validate_product_quantity(product_quantity:int = 0) -> int:
     Returns:
         int: The validated quantity.
     """
-    condition = True
+    condition:bool = True
     while condition:
         try:
             product_quantity = int(input("\n📦 Enter the available product quantity: "))
@@ -103,7 +103,7 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
     Returns:
         None: This function modifies the inventory directly and doesn't return a value.
     """
-    condition = True
+    condition:bool = True
     while condition:
         # Check if the product already exists
         if product_name in inventory.keys():
@@ -118,10 +118,10 @@ def add_product(product_name:str = "", product_price:float = 0.0, product_quanti
             condition = False
         else:
             # Validate new product information
-            product_name = validate_product_name()
+            product_name:str = validate_product_name()
             if product_name not in inventory.keys():
-                product_price = validate_product_price()
-                product_quantity = validate_product_quantity()
+                product_price:float = validate_product_price()
+                product_quantity:int = validate_product_quantity()
             else:
                 continue
 
@@ -141,7 +141,7 @@ def search_product(product_name:str = "") -> tuple[float, int]:
     """
     product_price:float = 0.0
     product_quantity:int = 0
-    condition = True
+    condition:bool = True
     while condition:
         # Check if the product exists in the inventory
         if product_name in inventory.keys():
