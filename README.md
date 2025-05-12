@@ -1,7 +1,6 @@
 # Inventory Management Program
 
-## Versión en español
-
+### Versión en español
 [Haz clic aquí para ver el README en español](https://github.com/Carturo8/Inventory-Management/blob/main/README_ES.md)
 
 This Python program helps manage a store's inventory efficiently. It provides functionalities to add, search, update, delete products, and calculate the total value of the inventory.
