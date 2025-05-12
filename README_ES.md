@@ -1,5 +1,9 @@
 # Programa de Gestión de Inventarios
 
+## English version
+
+Click here to see the [README](https://github.com/Carturo8/Inventory-Management/blob/main/README.md) in English
+
 Este programa en Python ayuda a gestionar eficientemente el inventario de una tienda. Proporciona funcionalidades para añadir, buscar, actualizar, eliminar productos y calcular el valor total del inventario.
 
 ## Características
